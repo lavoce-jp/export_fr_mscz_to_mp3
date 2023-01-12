@@ -1,10 +1,10 @@
-# 開発者はLaVoce23期和泉衛です。わからないことがあれば聞いてください。
+# 開発者はLaVoce23期Web担当です。わからないことがあれば聞いてください。
 from lxml import etree
 import subprocess
 from zipfile import ZipFile
 import os
 
-# 最大値最小値を書き出す関数を実装しました。
+# 最大値最小値を書き出す関数を実装しました。(25期Admin)
 import getMaxMin as gm # getMaxMin.pyの中身をimport
 
 currentDirectory = os.getcwd()
@@ -29,13 +29,13 @@ for mscz in mscz_list:
     tmp = title + '/.tmp'
     subprocess.run(['mkdir', '-p', tmp])
 
-    # # pdfを出力
-    # subprocess.run([
-    #     mscore,
-    #     mscz,
-    #     '-o',
-    #     title +'/' + title + '.pdf'
-    # ])
+    # pdfを出力
+    subprocess.run([
+        mscore,
+        mscz,
+        '-o',
+        title +'/' + title + '.pdf'
+    ])
 
     # msczをunzipし、mscxをtmpディレクトリに格納
     with ZipFile(mscz, 'r') as mscx_zip:
