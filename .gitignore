@@ -130,3 +130,6 @@ dmypy.json
 
 # ignore venv (name:exportMp3)
 exportMp3/
+
+# .code-workspace
+.code-workspace
