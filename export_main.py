@@ -164,7 +164,7 @@ def export_pitch_info(tree,parts,title):
     with open(pitchRangeRecordFile,mode = 'w') as f:
         f.write(pitchRange)
 
-def subthread(mscz_in):
+def subthread(mscz):
     '''各msczに対して実行する'''
     pass
 
