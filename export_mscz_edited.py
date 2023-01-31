@@ -17,11 +17,11 @@ for x in file_list:
         mscz_list.append(x)
 
 # コンピュータ内のmscoreの場所を保持(MacOS)
-# mscore = '/Applications/MuseScore 3.app/Contents/MacOS/mscore'
+# MSCORE = '/Applications/MuseScore 3.app/Contents/MacOS/mscore'
 # コンピュータ内のmscoreの場所を保持(Windows)
-# mscore = 'C:\Program Files\MuseScore 3\bin\MuseScore3.exe'
+# MSCORE = 'C:\Program Files\MuseScore 3\bin\MuseScore3.exe'
 # コンピュータ内のmscoreの場所を保持(WSL:Windows Subsystem for Linux)
-mscore = '/mnt/c/Program Files/MuseScore 3/bin/MuseScore3.exe'
+MSCORE = '/mnt/c/Program Files/MuseScore 3/bin/MuseScore3.exe'
 
 print(f'mscx_list={mscz_list}')
 for mscz in mscz_list:
@@ -31,7 +31,7 @@ for mscz in mscz_list:
 
     # pdfを出力
     subprocess.run([
-        mscore,
+        MSCORE,
         mscz,
         '-o',
         title +'/' + title + '.pdf'
@@ -119,7 +119,7 @@ for mscz in mscz_list:
     for i in range(length):
         # mp3の出力
         proc = subprocess.Popen([
-            mscore,
+            MSCORE,
             part_list[i],
             '-o',
             title + '/' + title + '_' + parts[i] + '.mp3'
