@@ -176,13 +176,67 @@ def export_pitch_info(tree,parts,title):
     with open(pitchRangeRecordFile,mode = 'w') as f:
         f.write(pitchRange)
 
-def subthread(mscz):
-    '''各msczに対して実行する'''
-    pass
+def sub_function(mscz):
+    '''
+        各msczに対して実行する。
+        title生成、tmpディレクトリ生成、
+    
+    '''
 
 
-def mainthread():
-    '''必ず呼び出される'''
+    title = mscz.replace('.mscz', '')
+    tmp = title + '/.tmp'
+    subprocess.run(['mkdir', '-p', tmp])
+
+    # pdfを出力
+    subprocess.run([
+        MSCORE,
+        mscz,
+        '-o',
+        title +'/' + title + '.pdf'
+    ])
+
+    # msczをunzipし、mscxをtmpディレクトリに格納
+    with ZipFile(mscz, 'r') as mscx_zip:
+        file_names = mscx_zip.namelist()
+        for file_name in file_names:
+            if file_name.endswith('.mscx'):
+                mscx_zip.extract(file_name, tmp)
+                break
+
+    # mscxをリネーム（パス付き）
+    mscx = tmp + '/' + title + '.mscx'
+    os.rename(tmp + '/' + file_name, mscx)
+
+    # mscxをparse
+    tree = etree.parse(mscx)
+    root = tree.getroot()
+
+    # workTitleをtitleに変更
+    workTitle = tree.xpath('//metaTag[@name="workTitle"]')
+    workTitle[0].text = title
+
+    # パート名を出力
+    parts = tree.xpath('//longName')
+    parts = [parts[i].text for i in range(len(parts))]
+    length = len(parts)
+
+    # pitch info出力
+
+    # mp3の出力
+
+    # tmpディレクトリを削除
+    subprocess.run(['rm', '-r', tmp])
+    subprocess.run(['mv', mscz, title])
+    # subprocess.run(['zip', '-r', title + '.zip', title])
+    # subprocess.run(['rm', '-r', title])
+
+
+
+
+
+def main_function():
+    '''python実行時必ず呼び出される'''
     parser = argparse.ArgumentParser(description='このプログラムの説明（なくてもよい）') # 2. パーサを作る
 
     # 3. parser.add_argumentで受け取る引数を追加していく
@@ -193,6 +247,7 @@ def mainthread():
 
     parser.add_argument('--pdf',action='store_true')
     parser.add_argument('--mp3',action='store_true')
+    parser.add_argument('-f', '--file')
 
 
     args = parser.parse_args() # 4. 引数を解析
@@ -200,7 +255,7 @@ def mainthread():
     # print('arg1='+args.arg1)
     # print('arg2='+args.arg2)
     print('arg3='+args.arg3)
-    print('arg4='+args.arg4)
+    print('file='+args.file)
 
 
     currentDirectory = os.getcwd()
@@ -213,10 +268,17 @@ def mainthread():
             mscz_list.append(x)
 
     print(f'mscx_list={mscz_list}')
+    
+    # file指定の有無で呼び出す回数を変える。
+    if args.file == '':
+        for mscz in mscz_list:
+            sub_function(mscz)
+    else:
+        sub_function(args.file)
 
 
 
 
 
 if __name__ == '__main__':
-    mainthread()
+    main_function()
