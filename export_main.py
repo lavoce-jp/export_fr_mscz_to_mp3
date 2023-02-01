@@ -341,10 +341,10 @@ if __name__ == '__main__':
     # parser.add_argument('--arg3') # オプション引数（指定しなくても良い引数）を追加
     # parser.add_argument('-a', '--arg4') # よく使う引数なら省略形があると使う時に便利
 
-    parser.add_argument('--pdf',action='store_true')
-    parser.add_argument('--mp3',action='store_true')
-    parser.add_argument('-f', '--file')
-    parser.add_argument('-m', '--mv-mscz', action='store_true', help = 'delete the original mscz file and create copy in the Child file')
+    parser.add_argument('--pdf',action='store_true', help='if selected, export score as a pdf file.')
+    parser.add_argument('--mp3',action='store_true', help='if selected, export a mp3 file for each part.')
+    parser.add_argument('-f', '--file', help='if file name is specified, export files only for that file.')
+    parser.add_argument('-m', '--mv-mscz', action='store_true', help = 'if selected, delete the original mscz file and create copy in the Child file.')
 
 
     args = parser.parse_args() # 4. 引数を解析
@@ -356,3 +356,4 @@ if __name__ == '__main__':
 
 
     main_function(args)
+    print('all files export complete.')

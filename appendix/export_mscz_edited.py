@@ -6,7 +6,7 @@ import os
 import operator
 
 # 最大値最小値を書き出す関数を実装しました。(25期Admin)
-import getMaxMin as gm # getMaxMin.pyの中身をimport
+import appendix.getMaxMin as gm # getMaxMin.pyの中身をimport
 
 currentDirectory = os.getcwd()
 print(f'Current working directory:{currentDirectory}')
