@@ -175,8 +175,72 @@ def export_pitch_info(tree,parts,title):
         # pitchRange += f'partID:{i},partName:{parts[i]}'
     with open(pitchRangeRecordFile,mode = 'w') as f:
         f.write(pitchRange)
+    
+    print(f'\t{title}\t:pitchinfo export complete')
 
-def sub_function(mscz):
+
+def export_mp3(tree,parts,title):
+    
+    length = len(parts)
+    tmp = title + '/.tmp'
+
+    # フェーダー情報
+    controllers = tree.xpath('//Part/Instrument/Channel/controller[@ctrl="7"]')
+
+    # 一旦フェーダーの要素を全て削除する
+    for x in controllers:
+        x.getparent().remove(x)
+    
+    # 全Partに対しフェーダー情報をセットし、ctrlに7を設定
+    for i in range(length):
+        tree.xpath('//Part[' + str(i + 1) + ']/Instrument/Channel')[0].append(etree.Element('controller'))
+        child = tree.xpath('//Part[' + str(i + 1) + ']/Instrument/Channel/controller')[0]
+        child.attrib['ctrl'] = '7'
+
+    # 再び変数に代入
+    controllers = tree.xpath('//Part/Instrument/Channel/controller[@ctrl="7"]')
+
+    # パートのmscxをリストで保存
+    part_list = []
+
+    # 音源を出力
+    for i in range(length):
+        # フェーダー情報の書き換え
+        for j in range(length):
+            if j == i:
+                controllers[j].attrib['value'] = '100'
+            else:
+                controllers[j].attrib['value'] = '50'
+
+        # mscxの出力
+        part = tmp + '/' + str(i) + '.mscx'
+        tree.write(
+            part,
+            pretty_print = True,
+            xml_declaration = True,
+            encoding = 'utf-8'
+        )
+        part_list.append(part)
+
+    proc_list = []
+
+    for i in range(length):
+        # mp3の出力
+        proc = subprocess.Popen([
+            MSCORE,
+            part_list[i],
+            '-o',
+            title + '/' + title + '_' + parts[i] + '.mp3'
+        ])
+        proc_list.append(proc)
+        if i + 1 == length:
+            for subproc in proc_list:
+                subproc.wait()
+    
+    print(f'\t{title}\t:mp3 export complete')
+
+
+def sub_function(mscz,args):
     '''
         各msczに対して実行する。
         title生成、tmpディレクトリ生成、
@@ -188,13 +252,14 @@ def sub_function(mscz):
     tmp = title + '/.tmp'
     subprocess.run(['mkdir', '-p', tmp])
 
-    # pdfを出力
-    subprocess.run([
-        MSCORE,
-        mscz,
-        '-o',
-        title +'/' + title + '.pdf'
-    ])
+    if args.pdf :
+        # pdfを出力
+        subprocess.run([
+            MSCORE,
+            mscz,
+            '-o',
+            title +'/' + title + '.pdf'
+        ])
 
     # msczをunzipし、mscxをtmpディレクトリに格納
     with ZipFile(mscz, 'r') as mscx_zip:
@@ -222,12 +287,15 @@ def sub_function(mscz):
     length = len(parts)
 
     # pitch info出力
-
+    export_pitch_info(tree,parts,title)
     # mp3の出力
+    if args.mp3:
+        export_mp3(tree,parts,title)
 
     # tmpディレクトリを削除
     subprocess.run(['rm', '-r', tmp])
-    subprocess.run(['mv', mscz, title])
+    if args.mv_mscz:
+        subprocess.run(['mv', mscz, title])
     # subprocess.run(['zip', '-r', title + '.zip', title])
     # subprocess.run(['rm', '-r', title])
 
@@ -235,27 +303,9 @@ def sub_function(mscz):
 
 
 
-def main_function():
+def main_function(args):
     '''python実行時必ず呼び出される'''
-    parser = argparse.ArgumentParser(description='このプログラムの説明（なくてもよい）') # 2. パーサを作る
-
-    # 3. parser.add_argumentで受け取る引数を追加していく
-    # parser.add_argument('arg1', help='この引数の説明（なくてもよい）') # 必須の引数を追加
-    # parser.add_argument('arg2', help='foooo')
-    parser.add_argument('--arg3') # オプション引数（指定しなくても良い引数）を追加
-    parser.add_argument('-a', '--arg4') # よく使う引数なら省略形があると使う時に便利
-
-    parser.add_argument('--pdf',action='store_true')
-    parser.add_argument('--mp3',action='store_true')
-    parser.add_argument('-f', '--file')
-
-
-    args = parser.parse_args() # 4. 引数を解析
-
-    # print('arg1='+args.arg1)
-    # print('arg2='+args.arg2)
-    print('arg3='+args.arg3)
-    print('file='+args.file)
+    
 
 
     currentDirectory = os.getcwd()
@@ -270,15 +320,39 @@ def main_function():
     print(f'mscx_list={mscz_list}')
     
     # file指定の有無で呼び出す回数を変える。
-    if args.file == '':
+    if args.file is None :
         for mscz in mscz_list:
-            sub_function(mscz)
+            print('target file:',mscz,'\t','args:',args)
+            sub_function(mscz,args)
     else:
-        sub_function(args.file)
+        sub_function(args.file,args)
 
 
 
 
 
 if __name__ == '__main__':
-    main_function()
+
+    parser = argparse.ArgumentParser(description='このプログラムの説明（なくてもよい）') # 2. パーサを作る
+
+    # 3. parser.add_argumentで受け取る引数を追加していく
+    # parser.add_argument('arg1', help='この引数の説明（なくてもよい）') # 必須の引数を追加
+    # parser.add_argument('arg2', help='foooo')
+    # parser.add_argument('--arg3') # オプション引数（指定しなくても良い引数）を追加
+    # parser.add_argument('-a', '--arg4') # よく使う引数なら省略形があると使う時に便利
+
+    parser.add_argument('--pdf',action='store_true')
+    parser.add_argument('--mp3',action='store_true')
+    parser.add_argument('-f', '--file')
+    parser.add_argument('-m', '--mv-mscz', action='store_true', help = 'delete the original mscz file and create copy in the Child file')
+
+
+    args = parser.parse_args() # 4. 引数を解析
+
+    # print('arg1='+args.arg1)
+    # print('arg2='+args.arg2)
+    # print('arg3='+args.arg3)
+    print('file=',args.file)
+
+
+    main_function(args)

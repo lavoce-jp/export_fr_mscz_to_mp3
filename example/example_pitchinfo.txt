@@ -1,0 +1,8 @@
+partID:1,partName:F ホルン,	Min:C#3,	Minbars=[1],	Max:B4,	Maxbars=[4]
+partID:2,partName:B♭ コルネット,	Min:C#3,	Minbars=[1],	Max:B4,	Maxbars=[4]
+partID:3,partName:ピアノ,	Min:C#3,	Minbars=[1],	Max:B4,	Maxbars=[4]
+partID:4,partName:ソプラノ,	Min:C#3,	Minbars=[1],	Max:B4,	Maxbars=[4]
+partID:5,partName:テナー,	Min:C#3,	Minbars=[1],	Max:D6,	Maxbars=[4]
+partID:6,partName:バリトン,	Min:C#3,	Minbars=[1],	Max:B4,	Maxbars=[4]
+partID:7,partName:バス,	Min:C#3,	Minbars=[1],	Max:B4,	Maxbars=[4]
+partID:8,partName:ベース,	Min:C#3,	Minbars=[1],	Max:B4,	Maxbars=[4]
