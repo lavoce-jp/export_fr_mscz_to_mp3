@@ -6,11 +6,11 @@ import operator
 import argparse
 
 # コンピュータ内のmscoreの場所を保持(MacOS)
-# MSCORE = '/Applications/MuseScore 3.app/Contents/MacOS/mscore'
+MSCORE = '/Applications/MuseScore 3.app/Contents/MacOS/mscore'
 # コンピュータ内のmscoreの場所を保持(Windows)
 # MSCORE = 'C:\Program Files\MuseScore 3\bin\MuseScore3.exe'
 # コンピュータ内のmscoreの場所を保持(WSL:Windows Subsystem for Linux)
-MSCORE = '/mnt/c/Program Files/MuseScore 3/bin/MuseScore3.exe'
+# MSCORE = '/mnt/c/Program Files/MuseScore 3/bin/MuseScore3.exe'
 
 def MeasureMaxMin(Measure):
 
