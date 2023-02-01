@@ -3,6 +3,7 @@ from lxml import etree
 import subprocess
 from zipfile import ZipFile
 import os
+import operator
 
 # 最大値最小値を書き出す関数を実装しました。(25期Admin)
 import getMaxMin as gm # getMaxMin.pyの中身をimport
