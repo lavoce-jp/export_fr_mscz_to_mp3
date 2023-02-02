@@ -2,16 +2,14 @@
 
 　このPython3スクリプトは、 `.mscz` ファイルから各声部の音域を`.txt`の形式で書き出すためのプログラムです。さらに、オプション引数を指定すれば`.pdf`形式での楽譜の出力、各パート音源の`.mp3`での出力も可能です。
 
-## required 
+## preparation
+
+実行するためには、 python3の実行環境とパッケージが必要です。
+
+
+## required packages
 
 要求されるパッケージは [`requirement.txt`](requirement.txt)に記載してあります。
-
-<iframe id="inlineFrame"
-    title="requirement.txt"
-    width="300"
-    height="200"
-    src="https://github.com/lavoce-jp/export_fr_mscz_to_mp3/blob/main/requirement.txt>
-</iframe>
 
 現在の所`lxml`のみが要求されます。
 `pip install lxml`を走らせることでインストールできます。
