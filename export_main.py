@@ -230,7 +230,7 @@ def export_mp3(tree,parts,title):
             MSCORE,
             part_list[i],
             '-o',
-            title + '/' + title + '_' + (i+1) + '_' + parts[i] + '.mp3'
+            title + '/' + title + '_' + str(i+1) + '_' + parts[i] + '.mp3'
         ])
         proc_list.append(proc)
         if i + 1 == length:
