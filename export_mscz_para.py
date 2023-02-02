@@ -1,4 +1,4 @@
-# 開発者はLaVoce23期和泉衛です。わからないことがあれば聞いてください。
+# 開発者はLaVoce23期Web担当です。わからないことがあれば聞いてください。
 from lxml import etree
 import subprocess
 from zipfile import ZipFile
