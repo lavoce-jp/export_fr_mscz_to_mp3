@@ -5,6 +5,11 @@
 ## preparation
 
 実行するためには、 python3の実行環境とパッケージが必要です。
+Terminalで
+`python -V`や`python3 -V `と打って、pythonのバージョンが3であることを確かめてください。
+
+もしインストールされていない場合は、
+[参考サイト1](https://it-syoya-engineer.com/mac-python-default-change/#:~:text=mac%E3%81%AF%E3%83%87%E3%83%95%E3%82%A9%E3%83%AB%E3%83%88%E3%81%A7python16%E3%81%8C%E5%85%A5%E3%81%A3%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99%E3%80%82)などに従ってPython3をインストールしてください。
 
 
 ## required packages
@@ -15,7 +20,15 @@
 `pip install lxml`を走らせることでインストールできます。
 `pip install -r requirement.txt`としても構いません。
 
-pip がインストールされていない場合、`brew install pip`でインストールできるかと思います。
+pip がインストールされていない場合、
+[参考サイト](https://yumarublog.com/python/pip-install/)によると、
+terminalで
+`curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`
+を走らせ、そのの次に
+`python get-pip.py`
+を走らせるとインストールできるようです。
+
+もしもできなければ、`python3 -m install pip`でインストールできるかと思います。
 
 ## usage
 
